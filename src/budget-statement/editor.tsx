@@ -2,20 +2,18 @@ import {
     AccountInput,
     actions,
     BudgetStatementAction,
-    BudgetStatementDocument,
+    BudgetStatementState,
     LineItem,
 } from '@acaldas/document-model-libs/browser/budget-statement';
-import type { EditorProps } from '../base';
+import type { EditorProps } from '../common';
 import AccountForm from './components/account-form';
 import AccountsTable from './components/accounts-table';
 import LineItemForm from './components/line-item-form';
 
-interface IProps extends EditorProps {
-    budgetStatement: BudgetStatementDocument;
-    dispatch: (action: BudgetStatementAction) => void;
-}
+export type IProps = EditorProps<BudgetStatementState, BudgetStatementAction>;
 
-const Editor: React.FC<IProps> = ({ budgetStatement, dispatch }) => {
+function Editor({ document: budgetStatement, dispatch }: IProps) {
+
     function addAccount(account: AccountInput) {
         dispatch(actions.addAccount([account]));
     }
@@ -38,12 +36,12 @@ const Editor: React.FC<IProps> = ({ budgetStatement, dispatch }) => {
         dispatch(actions.deleteLineItem(account, [lineItem]));
     }
 
-    const accounts = budgetStatement.data.accounts;
+    const accounts = budgetStatement.state.accounts;
 
     return (
         <div>
             <AccountsTable
-                data={budgetStatement.data}
+                data={budgetStatement.state}
                 onDeleteAccount={deleteAccount}
                 onDeleteLineItem={deleteLineItem}
             />
@@ -58,6 +56,6 @@ const Editor: React.FC<IProps> = ({ budgetStatement, dispatch }) => {
             </div>
         </div>
     );
-};
+}
 
 export default Editor;

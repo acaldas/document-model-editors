@@ -1,20 +1,19 @@
 import {
+    BudgetStatementAction,
     BudgetStatementDocument,
-    reducer as BudgetStatementReducer,
+    BudgetStatementState,
+    reducer,
     utils,
 } from '@acaldas/document-model-libs/browser/budget-statement';
-import { useDocumentReducer } from '../base';
+import { useDocumentReducer } from '../common';
 
 export default function useBudgetStatementReducer(
-    initialState: Partial<
-        Omit<BudgetStatementDocument, 'data'> & {
-            data: Partial<BudgetStatementDocument['data']>;
-        }
-    >
+    document: BudgetStatementDocument = utils.createBudgetStatement(),
+    onError?: (error: unknown) => void
 ) {
-    return useDocumentReducer(
-        BudgetStatementReducer,
-        initialState,
-        utils.createBudgetStatement
+    return useDocumentReducer<BudgetStatementState, BudgetStatementAction>(
+        reducer,
+        document,
+        onError
     );
 }
